@@ -7,14 +7,10 @@ using GymManagementDAL.Entities;
 
 namespace GymManagementDAL.Repositories.Interfaces
 {
-    public interface IPlanRepository
+    public interface IUnitOfWork
     {
-        // Get All
-        IEnumerable<Plan> GetAll();
-        // Get By Id
-        Plan? GetById(int id);
-        // Update
-        int Update(Plan plan);
-      
+
+        IGenericRepository<T> GetRepository<T>() where T : BaseEntity, new();
+        int SaveChanges();
     }
 }

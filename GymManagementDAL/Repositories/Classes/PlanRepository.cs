@@ -9,7 +9,7 @@ using GymManagementDAL.Repositories.Interfaces;
 
 namespace GymManagementDAL.Repositories.Classes
 {
-    internal class PlanRepository : IPlanRepository
+    public class PlanRepository : IPlanRepository
     {
         private readonly GymDbContext _dbContext;
 
@@ -17,20 +17,6 @@ namespace GymManagementDAL.Repositories.Classes
         { 
             _dbContext = dbContext;
         }
-        public int Add(Plan plan)
-        {
-            _dbContext.Plans.Add(plan);
-            return _dbContext.SaveChanges();
-        }
-
-        public int Delete(int id)
-        {
-            var plan = _dbContext.Plans.Find(id);
-            if (plan is null) return 0;
-            _dbContext.Plans.Remove(plan);
-            return _dbContext.SaveChanges();
-        }
-
         public IEnumerable<Plan> GetAll() => _dbContext.Plans.ToList();
 
         public Plan? GetById(int id) => _dbContext.Plans.Find(id);
