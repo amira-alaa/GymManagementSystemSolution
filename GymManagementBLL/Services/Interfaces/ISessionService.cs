@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GymManagementBLL.ViewModels.SessionViewModel;
 using GymManagementDAL.Entities;
 using GymManagementSystemBLL.ViewModels.SessionViewModels;
 
 namespace GymManagementBLL.Services.Interfaces
 {
-    internal interface ISessionService
+    public interface ISessionService
     {
         IEnumerable<SessionViewModel> Index();
         SessionViewModel? GetSessionById(int id);
@@ -18,5 +19,8 @@ namespace GymManagementBLL.Services.Interfaces
         UpdateSessionViewModel? GetSessionForUpdate(int id);
         bool UpdateSession(UpdateSessionViewModel UpdateSession , int Id);
         bool RemoveSession(int id);
+
+        IEnumerable<TrainerSelectViewModel> GetAllTrainerForDropDown();
+        IEnumerable<CategorySelectViewModel> GetAllCategoryForDropDown();
     }
 }

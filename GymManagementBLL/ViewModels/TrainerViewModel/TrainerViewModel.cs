@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementBLL.ViewModels.TrainerViewModel
 {
-    internal class TrainerViewModel
+    public class TrainerViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
@@ -15,7 +15,7 @@ namespace GymManagementBLL.ViewModels.TrainerViewModel
         public string Specialties { get; set; } = null!;
 
         // Nullable Entities
-
+        public DateOnly? DateOfBirth { get; set; }
         public string? Address { get; set; } 
     }
 }

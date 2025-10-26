@@ -11,7 +11,7 @@ using GymManagementDAL.Repositories.Interfaces;
 
 namespace GymManagementBLL.Services.Classes
 {
-    internal class TrainerService : ITrainerService
+    public class TrainerService : ITrainerService
     {
         
         private readonly IUnitOfWork _unitOfWork;
@@ -70,7 +70,9 @@ namespace GymManagementBLL.Services.Classes
         public bool UpdateTrainerDetails(int id, TrainerToUpdateViewModel trainerToUpdate)
         {
             try {
-                if (IsEmailExists(trainerToUpdate.Email) || IsPhoneExists(trainerToUpdate.Phone)) return false;
+                var IsEmailExists = _unitOfWork.GetRepository<Trainer>().GetAll(x => x.Email == trainerToUpdate.Email && x.Id != id).Any();
+                var IsPhoneExists = _unitOfWork.GetRepository<Trainer>().GetAll(x => x.Phone == trainerToUpdate.Phone && x.Id != id).Any();
+                if (IsEmailExists || IsPhoneExists) return false;
                 var trainer = _unitOfWork.GetRepository<Trainer>().GetById(id);
                 if (trainer == null) return false;
            
@@ -87,6 +89,7 @@ namespace GymManagementBLL.Services.Classes
         {
             var trainer = _unitOfWork.GetRepository<Trainer>().GetById(id);
             if (trainer == null) return false;
+
             var IsHasFutureSessions = _unitOfWork.GetRepository<Session>().GetAll(s => s.TrainerId == id && s.StartDate > DateTime.Now).Any();
             if (IsHasFutureSessions) return false;
             _unitOfWork.GetRepository<Trainer>().Delete(trainer);

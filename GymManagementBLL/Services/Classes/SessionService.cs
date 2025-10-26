@@ -5,13 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using GymManagementBLL.Services.Interfaces;
+using GymManagementBLL.ViewModels.SessionViewModel;
 using GymManagementDAL.Entities;
 using GymManagementDAL.Repositories.Interfaces;
 using GymManagementSystemBLL.ViewModels.SessionViewModels;
 
 namespace GymManagementBLL.Services.Classes
 {
-    internal class SessionService : ISessionService
+    public class SessionService : ISessionService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -91,6 +92,17 @@ namespace GymManagementBLL.Services.Classes
                return false;
             }
         }
+        public IEnumerable<TrainerSelectViewModel> GetAllTrainerForDropDown()
+        {
+            var trainers = _unitOfWork.GetRepository<Trainer>().GetAll();
+            return _mapper.Map<IEnumerable<TrainerSelectViewModel>>(trainers);
+        }
+
+        public IEnumerable<CategorySelectViewModel> GetAllCategoryForDropDown()
+        {
+            var categories = _unitOfWork.GetRepository<Category>().GetAll();
+            return _mapper.Map<IEnumerable<CategorySelectViewModel>>(categories);
+        }
 
         #region Helpers
         private bool IsTrainerExists(int trainerId) => _unitOfWork.GetRepository<Trainer>().GetById(trainerId) is not null;
@@ -100,8 +112,8 @@ namespace GymManagementBLL.Services.Classes
         private bool IsSessionAvailableToUpdate(Session session)
         {
             if (session is null) return false;
-            if (session.StartDate <= DateTime.Now) return false;
-            if (session.EndDate < DateTime.Now) return false;
+            if (session.StartDate <= DateTime.Now) return false; // ongoing
+            if (session.EndDate < DateTime.Now) return false;    // completed
             var HasActiveBookings = _unitOfWork.SessionRepository.GetNumOfBookedSlots(session.Id) > 0;
             if (HasActiveBookings) return false;
             return true;
@@ -116,6 +128,7 @@ namespace GymManagementBLL.Services.Classes
             if (HasActiveBookings) return false;
             return true;
         }
+
 
 
         #endregion

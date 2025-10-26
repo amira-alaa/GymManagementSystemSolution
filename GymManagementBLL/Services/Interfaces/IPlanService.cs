@@ -7,11 +7,11 @@ using GymManagementBLL.ViewModels.PlanViewModel;
 
 namespace GymManagementBLL.Services.Interfaces
 {
-    internal interface IPlanService
+    public interface IPlanService
     {
         IEnumerable<PlanViewModel> Index();
         PlanViewModel? GetPlanDetails(int id);
-        PlanViewModel? GetPlanToUpdate(int id);
+        UpdatePlanViewModel? GetPlanToUpdate(int id);
         bool UpdatePlan(int id , UpdatePlanViewModel updatedPlan);
         bool TogglePlanStatus(int id);
     }

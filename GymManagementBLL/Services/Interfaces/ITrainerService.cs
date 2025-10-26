@@ -7,7 +7,7 @@ using GymManagementBLL.ViewModels.TrainerViewModel;
 
 namespace GymManagementBLL.Services.Interfaces
 {
-    internal interface ITrainerService
+    public interface ITrainerService
     {
         IEnumerable<TrainerViewModel> Index();
         bool Create(CreateTrainerViewModel createTrainer);

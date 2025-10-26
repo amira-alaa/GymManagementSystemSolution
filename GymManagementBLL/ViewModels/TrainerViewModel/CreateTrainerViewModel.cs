@@ -9,7 +9,7 @@ using GymManagementDAL.Entities.Enums;
 
 namespace GymManagementBLL.ViewModels.TrainerViewModel
 {
-    internal class CreateTrainerViewModel
+    public class CreateTrainerViewModel
     {
         [Required(ErrorMessage = "Name Is Required")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Name Must be between 2 and 50 Character")]

@@ -12,7 +12,7 @@ using GymManagementDAL.Repositories.Interfaces;
 
 namespace GymManagementBLL.Services.Classes
 {
-    internal class PlanService : IPlanService
+    public class PlanService : IPlanService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -38,11 +38,11 @@ namespace GymManagementBLL.Services.Classes
             
         }
 
-        public PlanViewModel? GetPlanToUpdate(int id)
+        public UpdatePlanViewModel? GetPlanToUpdate(int id)
         {
             var plan = _unitOfWork.GetRepository<Plan>().GetById(id);
             if (plan == null || plan.IsActive == false || IsPlanActive(id)) return null;
-            return _mapper.Map<Plan, PlanViewModel>(plan);
+            return _mapper.Map<Plan, UpdatePlanViewModel>(plan);
            
         }
 
