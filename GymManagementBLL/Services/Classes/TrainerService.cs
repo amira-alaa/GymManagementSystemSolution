@@ -37,6 +37,7 @@ namespace GymManagementBLL.Services.Classes
         {
             try
             {
+
                 if (IsEmailExists(createTrainer.Email) || IsPhoneExists(createTrainer.Phone)) return false;
                
                 var trainer = _mapper.Map<CreateTrainerViewModel, Trainer>(createTrainer);
