@@ -31,11 +31,13 @@ namespace GymManagementDAL.Repositories.Classes
                                       .AsNoTracking()
                                       .FirstOrDefault(s => s.Id == id);
         }
+       
 
         public IEnumerable<Session> GetSessionsWithTrainersAndCategories()
         {
             return _dbContext.Sessions.Include(s => s.SessionTrainer)
                                       .Include(s => s.SessionCategory)
+                                      .Include(s => s.MemberSessions)
                                       .AsNoTracking().ToList();
         }
     }

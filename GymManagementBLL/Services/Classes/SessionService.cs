@@ -42,6 +42,7 @@ namespace GymManagementBLL.Services.Classes
 
         }
 
+    
 
         public bool CreateSession(CreateSessionViewModel session)
         {
@@ -128,6 +129,7 @@ namespace GymManagementBLL.Services.Classes
             if (HasActiveBookings) return false;
             return true;
         }
+
 
 
 

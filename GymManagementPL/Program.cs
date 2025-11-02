@@ -31,6 +31,9 @@ namespace GymManagementPL
             //builder.Services.AddScoped<IPlanRepository, PlanRepository>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<ISessionRepository, SessionRepository>();
+            builder.Services.AddScoped<IMemberShipRepository, MemberShipRepository>();
+            builder.Services.AddScoped<IMemberSessionRepository, MemberSessionRepository>();
+
             builder.Services.AddScoped<IAnalyticesService, AnalyticesService>();
             builder.Services.AddAutoMapper(x => x.AddProfile(new MappingProfile()));
             builder.Services.AddScoped<IMemberService, MemberService>();
@@ -39,6 +42,9 @@ namespace GymManagementPL
             builder.Services.AddScoped<ISessionService, SessionService>();
             builder.Services.AddScoped<IAttachmentService, AttachmentService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
+            builder.Services.AddScoped<IMemberShipService, MemberShipService>();
+            builder.Services.AddScoped<IMemberSessionService, MemberSessionService>();
+
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(x =>
             {
                 x.User.RequireUniqueEmail = true;

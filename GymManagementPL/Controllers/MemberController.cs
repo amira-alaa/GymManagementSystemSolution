@@ -116,8 +116,8 @@ namespace GymManagementPL.Controllers
                 TempData["Error"] = "Cannot Found Member ";
                 return RedirectToAction(nameof(Index));
             }
-            var memberToUpdate = _memberService.GetMemberToUpdate(id);
-            if (memberToUpdate is null)
+            var member = _memberService.GetMember(id);
+            if (member is null)
             {
                 TempData["Error"] = "Cannot Found Member ";
                 return RedirectToAction(nameof(Index));

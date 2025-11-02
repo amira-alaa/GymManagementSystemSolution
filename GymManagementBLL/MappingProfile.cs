@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using GymManagementBLL.ViewModels.MemberSessionViewModel;
+using GymManagementBLL.ViewModels.MemberShipViewModel;
 using GymManagementBLL.ViewModels.MemberViewModel;
 using GymManagementBLL.ViewModels.PlanViewModel;
 using GymManagementBLL.ViewModels.SessionViewModel;
@@ -23,6 +25,58 @@ namespace GymManagementBLL
             MapSession();
             MapMember();
             MapPlan();
+            MapMemberShip();
+            MapMemberSession();
+        }
+
+        private void MapMemberSession()
+        {
+            //CreateMap
+            CreateMap<MemberSession, MemberSessionViewModel>()
+                .ForMember(dest => dest.TrainerName, option => option.MapFrom(src => src.Session.SessionTrainer.Name))
+                .ForMember(dest => dest.CategoryName, option => option.MapFrom(src => src.Session.SessionCategory.CategoryName))
+                .ForMember(dest => dest.StartDate, option => option.MapFrom(src => src.Session.StartDate.ToShortDateString()))
+                .ForMember(dest => dest.EndDate, option => option.MapFrom(src => src.Session.EndDate.ToShortDateString()))
+                .ForMember(dest => dest.Capacity , opt => opt.MapFrom(src => src.Session.Capacity));
+
+
+            CreateMap<MemberSession, MembersForOnGoingSessionsViewModel>()
+                .ForMember(dest => dest.MemberName, opt => opt.MapFrom(src => src.Member.Name));
+
+            CreateMap<MemberSession, MembersForUpComingSessionsViewModel>()
+                .ForMember(dest => dest.MemberName, opt => opt.MapFrom(src => src.Member.Name))
+                .ForMember(dest => dest.BookingDate, opt => opt.MapFrom(src => src.CreatedAt));
+
+            CreateMap<Member, MembersForDropListBookingViewModel>()
+                .ForMember(dest => dest.MemberName, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.MemberId, opt => opt.MapFrom(src => src.Id));
+
+
+
+            CreateMap<CreateMemberSessionViewModel, MemberSession>()
+                //.ForMember(dest => dest.Member.Name, opt => opt.MapFrom(src => src.MemberName))
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.Now));
+
+        }
+
+        private void MapMemberShip()
+        {
+            //CreateMap
+            CreateMap<MemberShip, MemberShipViewModel>()
+                .ForMember(dest => dest.MemberName, option => option.MapFrom(src => src.Member.Name))
+                .ForMember(dest => dest.PlanName, option => option.MapFrom(src => src.Plan.Name))
+                .ForMember(dest => dest.MemberId, option => option.MapFrom(src => src.MemberId))
+                .ForMember(dest => dest.PlanId, option => option.MapFrom(src => src.PlanId))
+
+                .ForMember(dest => dest.MemberShipStartDate, option => option.MapFrom(src => src.CreatedAt.ToShortDateString()))
+                .ForMember(dest => dest.MemberShipEndDate, option => option.MapFrom(src => src.EndDate.ToShortDateString()));
+                
+
+            CreateMap<Member, SelectMemberToDropListViewModel>();
+            CreateMap<Plan, SelectPlanToDropListViewModel>();
+            CreateMap<CreateMemberShipViewModel, MemberShip>();
+                      //.ForMember(dest => dest.P);
+
         }
 
         private void MapTrainer()
@@ -56,7 +110,9 @@ namespace GymManagementBLL
             CreateMap<Session, SessionViewModel>()
                         .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.SessionCategory.CategoryName))
                         .ForMember(dest => dest.TrainerName, opt => opt.MapFrom(src => src.SessionTrainer.Name))
-                        .ForMember(dest => dest.AvailableSlots, opt => opt.Ignore()); 
+                        .ForMember(dest => dest.AvailableSlots, opt => opt.MapFrom(src => src.MemberSessions.Count(s => s.SessionId == src.Id))); 
+
+                        
             CreateMap<UpdateSessionViewModel, Session>().ReverseMap();
 
 
