@@ -9,7 +9,7 @@
                     <strong>Warning!</strong> This action cannot be undone. All Trainer data will be permanently deleted.
                 </div>
 
-                <form asp-action="DeleteConfirm" method="post" class="mt-4">
+                <form asp-action="DeleteConfirmAsync" method="post" class="mt-4">
                     <div class="buttons d-flex justify-content-between gap-3">
                         <input hidden readonly name="id" value="@ViewBag.TrainerId" />
                         <a asp-controller="Trainer" asp-action="Index" class="btn-outline flex-fill">NO</a>

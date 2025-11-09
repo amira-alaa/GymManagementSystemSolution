@@ -9,14 +9,14 @@ namespace GymManagementDAL.Repositories.Interfaces
 {
     public interface IMemberSessionRepository : IGenericRepository<MemberSession>
     {
-        IEnumerable<MemberSession> GetNotCompletedMemberSessions();
-        public int GetNumOfBookedSlots(int sessionId);
+        Task<IEnumerable<MemberSession>> GetNotCompletedMemberSessionsAsync();
+        Task<int> GetNumOfBookedSlotsAsync(int sessionId);
 
-        IEnumerable<MemberSession> GetMembersForOnGoing(int sessionId);
+        Task<IEnumerable<MemberSession>> GetMembersForOnGoingAsync(int sessionId);
 
-        IEnumerable<MemberSession> GetMembersForUpComing(int sessionId);
+        Task<IEnumerable<MemberSession>> GetMembersForUpComingAsync(int sessionId);
 
-        IEnumerable<Member> GetMembers();
+        //IEnumerable<Member> GetMembers();
 
     }
 }

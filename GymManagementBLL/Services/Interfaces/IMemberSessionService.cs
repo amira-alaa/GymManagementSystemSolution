@@ -11,17 +11,17 @@ namespace GymManagementBLL.Services.Interfaces
 {
     public interface IMemberSessionService
     {
-        IEnumerable<MemberSessionViewModel> GetNotCompletedMemberSessions();
+        Task<IEnumerable<MemberSessionViewModel>> GetNotCompletedMemberSessionsAsync();
 
-        IEnumerable<MembersForOnGoingSessionsViewModel> GetMembersForOnGoingsSessions(int sessionId);
-        bool IsAttended(int sessionId, int memberId);
+        Task<IEnumerable<MembersForOnGoingSessionsViewModel>> GetMembersForOnGoingsSessionsAsync(int sessionId);
+        Task<bool> IsAttendedAsync(int sessionId, int memberId);
 
-        IEnumerable<MembersForUpComingSessionsViewModel> GetMembersForUpComingSessions(int sessionId);
+        Task<IEnumerable<MembersForUpComingSessionsViewModel>> GetMembersForUpComingSessionsAsync(int sessionId);
 
-        bool DeleteMemberSession(int sessionId, int memberId);
+        Task<bool> DeleteMemberSessionAsync(int sessionId, int memberId);
 
-        bool CreateMemberSession(CreateMemberSessionViewModel CreatedMS);
-        IEnumerable<MembersForDropListBookingViewModel> GetMembers();
+        Task<bool> CreateMemberSessionAsync(CreateMemberSessionViewModel CreatedMS);
+        Task<IEnumerable<MembersForDropListBookingViewModel>> GetMembersAsync();
 
     }
 }

@@ -15,6 +15,6 @@ namespace GymManagementDAL.Repositories.Interfaces
         public IMemberShipRepository MemberShipRepository { get; }
 
         IGenericRepository<T> GetRepository<T>() where T : BaseEntity, new();
-        int SaveChanges();
+        Task<int> SaveChangesAsync();
     }
 }

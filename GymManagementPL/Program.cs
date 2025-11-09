@@ -14,7 +14,7 @@ namespace GymManagementPL
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -69,8 +69,9 @@ namespace GymManagementPL
             var Migrations = dbContext.Database.GetPendingMigrations();
             if (Migrations?.Any() ?? false) dbContext.Database.Migrate();
 
-            GymDbContextDataSeeding.DataSeed(dbContext);
-            IdentityDbContextSeeding.SeedData(userManager, roleManager);
+            await GymDbContextDataSeeding.DataSeedAsync(dbContext);
+            await IdentityDbContextSeeding.SeedDataAsync(userManager, roleManager);
+
             #endregion
 
             // Configure the HTTP request pipeline.

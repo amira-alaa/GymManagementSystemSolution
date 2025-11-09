@@ -39,9 +39,9 @@ namespace GymManagementDAL.Repositories.Classes
             return newRepository;
         }
 
-        public int SaveChanges()
+        public Task<int> SaveChangesAsync()
         {
-            return _dbContext.SaveChanges();
+            return _dbContext.SaveChangesAsync();
         }
     }
 }

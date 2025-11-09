@@ -19,13 +19,13 @@ namespace GymManagementDAL.Repositories.Classes
             _dbContext = dbContext;
         }
 
-        public int GetNumOfBookedSlots(int sessionId)
+        public async Task<int> GetNumOfBookedSlotsAsync(int sessionId)
         {
-            return _dbContext.MemberSessions.Count(s => s.SessionId == sessionId);
+            return await _dbContext.MemberSessions.CountAsync(s => s.SessionId == sessionId);
         }
-        public IEnumerable<MemberSession> GetNotCompletedMemberSessions()
+        public async Task<IEnumerable<MemberSession>> GetNotCompletedMemberSessionsAsync()
         {
-            return _dbContext.MemberSessions
+            return await _dbContext.MemberSessions
                              .Include(ms => ms.Session)
                              .ThenInclude(s => s.SessionTrainer)
                              .Include(ms => ms.Session)
@@ -33,34 +33,34 @@ namespace GymManagementDAL.Repositories.Classes
                              .Where(ms => ms.Session.EndDate > DateTime.Now)
                              .GroupBy(ms => new { ms.SessionId, ms.Session.TrainerId })
                              .Select(g => g.First()) 
-                             .ToList();
+                             .ToListAsync();
         }
 
-        public IEnumerable<MemberSession> GetMembersForOnGoing(int sessionId)
+        public async Task<IEnumerable<MemberSession>> GetMembersForOnGoingAsync(int sessionId)
         {
-            return _dbContext.MemberSessions
+            return await _dbContext.MemberSessions
                              .Include(ms => ms.Member)
                              .Include(ms => ms.Session)
                              .Where(ms => ms.SessionId == sessionId 
                                     && ms.Session.EndDate > DateTime.Now 
                                     && ms.Session.StartDate <= DateTime.Now)
-                             .ToList();
+                             .ToListAsync();
         }
 
-        public IEnumerable<MemberSession> GetMembersForUpComing(int sessionId)
+        public async Task<IEnumerable<MemberSession>> GetMembersForUpComingAsync(int sessionId)
         {
-            return _dbContext.MemberSessions
+            return await _dbContext.MemberSessions
                              .Include(ms => ms.Member)
                              .Include(ms => ms.Session)
                              .Where(ms => ms.SessionId == sessionId
                              && ms.Session.StartDate > DateTime.Now)
-                             .ToList();
+                             .ToListAsync();
         }
 
-        public IEnumerable<Member> GetMembers()
-        {
-            return _dbContext.Members
-                             .ToList();
-        }
+        //public IEnumerable<Member> GetMembers()
+        //{
+        //    return _dbContext.Members
+        //                     .ToList();
+        //}
     }
 }

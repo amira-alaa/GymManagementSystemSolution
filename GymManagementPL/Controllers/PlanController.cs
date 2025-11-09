@@ -16,20 +16,20 @@ namespace GymManagementPL.Controllers
             _planService = planService;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var plans = _planService.Index();
+            var plans = await _planService.GetAllPlansAsync();
             return View(plans);
         }
 
-        public ActionResult GetPlanDetails(int id)
+        public async Task<ActionResult> GetPlanDetails(int id)
         {
             if (id <= 0)
             {
                 TempData["Error"] = "Not Found Plan";
                 return RedirectToAction(nameof(Index));
             }
-            var plan = _planService.GetPlanDetails(id);
+            var plan = await _planService.GetPlanDetailsAsync(id);
             if (plan is null)
             {
                 TempData["Error"] = "Not Found Plan";
@@ -38,14 +38,14 @@ namespace GymManagementPL.Controllers
             return View(plan);
         }
 
-        public ActionResult UpdatePlan(int id)
+        public async Task<ActionResult> UpdatePlan(int id)
         {
             if (id <= 0)
             {
                 TempData["Error"] = "Not Found Plan";
                 return RedirectToAction(nameof(Index));
             }
-            var plan = _planService.GetPlanToUpdate(id);
+            var plan = await _planService.GetPlanToUpdateAsync(id);
             if (plan is null)
             {
                 TempData["Error"] = "Not Found Plan";
@@ -54,14 +54,14 @@ namespace GymManagementPL.Controllers
             return View(plan);
         }
         [HttpPost]
-        public ActionResult UpdatePlan(int id , UpdatePlanViewModel viewModel)
+        public async Task<ActionResult> UpdatePlan(int id , UpdatePlanViewModel viewModel)
         {
             if(!ModelState.IsValid)
             {
                 TempData["Error"] = "Invalid Data";
                 return View(viewModel);
             }
-            bool IsPlanUpdated = _planService.UpdatePlan(id , viewModel);
+            bool IsPlanUpdated = await _planService.UpdatePlanAsync(id , viewModel);
             if (IsPlanUpdated)
             {
                 TempData["Success"] = "Plan Updated Successfully";
@@ -69,18 +69,18 @@ namespace GymManagementPL.Controllers
             else
             {
                 TempData["Error"] = "Failed to Update Plan";
-            }
+            }   
             return RedirectToAction(nameof(Index));
         }
 
-        public ActionResult Activate(int id)
+        public async Task<ActionResult> Activate(int id)
         {
             if (id <= 0)
             {
                 TempData["Error"] = "Not Found Plan";
                 return RedirectToAction(nameof(Index));
             }
-            var plan = _planService.TogglePlanStatus(id);
+            var plan = await _planService.TogglePlanStatusAsync(id);
             if (!plan)
             {
                 TempData["Error"] = "Cannot Activate Plan";

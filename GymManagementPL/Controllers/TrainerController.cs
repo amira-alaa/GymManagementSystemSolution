@@ -15,19 +15,19 @@ namespace GymManagementPL.Controllers
         {
             _trainerService = trainerService;
         }
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var trainers = _trainerService.Index();
+            var trainers = await _trainerService.GetAllTrainerAsync();
             return View(trainers);
         }
-        public ActionResult GetTrainerDetails(int id)
+        public async Task<ActionResult> GetTrainerDetails(int id)
         {
             if (id <= 0)
             {
                 TempData["Error"] = "Not Found Trainer";
                 return RedirectToAction(nameof(Index));
             }
-            var trainer = _trainerService.GetTrainer(id);
+            var trainer = await _trainerService.GetTrainerByIdAsync(id);
             if (trainer is null)
             {
                 TempData["Error"] = "Not Found Trainer";
@@ -40,14 +40,14 @@ namespace GymManagementPL.Controllers
         {
             return View();
         }
-        public ActionResult CreateTrainer(CreateTrainerViewModel CreatedTrainer)
+        public async Task<ActionResult> CreateTrainer(CreateTrainerViewModel CreatedTrainer)
         {
             if (!ModelState.IsValid)
             {
                 TempData["Error"] = "Invalid Data";
                 return RedirectToAction(nameof(Create), CreatedTrainer);
             }
-            bool IsTrainerCreated = _trainerService.Create(CreatedTrainer);
+            bool IsTrainerCreated = await _trainerService.CreateTrainerAsync(CreatedTrainer);
             if (IsTrainerCreated)
             {
                 TempData["Success"] = "Trainer Created Successfully";
@@ -59,14 +59,14 @@ namespace GymManagementPL.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public ActionResult UpdateTrainer(int id)
+        public async Task<ActionResult> UpdateTrainer(int id)
         {
             if (id <= 0)
             {
                 TempData["Error"] = "Not Found Trainer";
                 return RedirectToAction(nameof(Index));
             }
-            var trainer = _trainerService.GetTrainerToUpdate(id);
+            var trainer = await _trainerService.GetTrainerToUpdateAsync(id);
             if (trainer is null)
             {
                 TempData["Error"] = "Not Found Trainer";
@@ -75,14 +75,14 @@ namespace GymManagementPL.Controllers
             return View(trainer);
         }
         [HttpPost]
-        public ActionResult UpdateTrainer(int id, TrainerToUpdateViewModel viewModel)
+        public async Task<ActionResult> UpdateTrainer(int id, TrainerToUpdateViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 TempData["Error"] = "Invalid Data";
                 return View(viewModel);
             }
-            bool IsTrainerUpdated = _trainerService.UpdateTrainerDetails(id, viewModel);
+            bool IsTrainerUpdated = await _trainerService.UpdateTrainerDetailsAsync(id, viewModel);
             if (!IsTrainerUpdated)
             {
                 TempData["Error"] = "Failed to Update Trainer";
@@ -94,14 +94,14 @@ namespace GymManagementPL.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             if (id <= 0)
             {
                 TempData["Error"] = "Not Found Trainer";
                 return RedirectToAction(nameof(Index));
             }
-            var trainer = _trainerService.GetTrainer(id);
+            var trainer = await _trainerService.GetTrainerByIdAsync(id);
             if (trainer is null)
             {
                 TempData["Error"] = "Not Found Trainer";
@@ -111,9 +111,9 @@ namespace GymManagementPL.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult DeleteConfirm(int id)
+        public async Task<ActionResult> DeleteConfirm(int id)
         {
-            bool IsTrainerDeleted = _trainerService.RemoveTrainer(id);
+            bool IsTrainerDeleted = await _trainerService.RemoveTrainerAsync(id);
             if (!IsTrainerDeleted)
             {
                 TempData["Error"] = "Failed To Delete Trainer";

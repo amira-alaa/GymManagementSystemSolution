@@ -23,16 +23,22 @@ namespace GymManagementBLL.Services.Classes
             _unitOfWork = unitOfWork;
         }
 
-        public AnalyticesViewModel GetAnalyticesData()
+        public async Task<AnalyticesViewModel> GetAnalyticesDataAsync()
         {
+            var totalMembers = await _unitOfWork.GetRepository<Member>().GetAllAsync();
+            var activeMembers = await _unitOfWork.GetRepository<MemberShip>().GetAllAsync(x => x.Status == "Active");
+            var trainers = await _unitOfWork.GetRepository<Trainer>().GetAllAsync();
+            var upComingSessions = await _unitOfWork.GetRepository<Session>().GetAllAsync(x => x.StartDate > DateTime.Now);
+            var onGoingSessions = await _unitOfWork.GetRepository<Session>().GetAllAsync(x => x.StartDate <= DateTime.Now && x.EndDate > DateTime.Now);
+            var completedSessions = await _unitOfWork.GetRepository<Session>().GetAllAsync(x => x.EndDate <= DateTime.Now);
             return new AnalyticesViewModel()
             {
-                TotalMembers = _unitOfWork.GetRepository<Member>().GetAll().Count(),
-                ActiveMembers = _unitOfWork.GetRepository<MemberShip>().GetAll(x => x.Status == "Active").Count(),
-                Trainers = _unitOfWork.GetRepository<Trainer>().GetAll().Count(),
-                UpComingSessions = _unitOfWork.GetRepository<Session>().GetAll(x => x.StartDate > DateTime.Now).Count(),
-                OnGoingSessions = _unitOfWork.GetRepository<Session>().GetAll(x => x.StartDate <= DateTime.Now && x.EndDate > DateTime.Now).Count(),
-                CompletedSessions = _unitOfWork.GetRepository<Session>().GetAll(x => x.EndDate <= DateTime.Now).Count()
+                TotalMembers = totalMembers.Count(),
+                ActiveMembers = activeMembers.Count(),
+                Trainers = trainers.Count(),
+                UpComingSessions = upComingSessions.Count(),
+                OnGoingSessions = onGoingSessions.Count(),
+                CompletedSessions = completedSessions.Count()
             };
         }
 

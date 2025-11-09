@@ -19,10 +19,10 @@ namespace GymManagementDAL.Repositories.Classes
             _dbContext = dbContext;
         }
 
-        public MemberShip? GetByMemberIdAndPlanId(int memberId, int planId)
+        public async Task<MemberShip?> GetByMemberIdAndPlanIdAsync(int memberId, int planId)
         {
-            return _dbContext.MemberShips
-                             .Where(ms => ms.MemberId == memberId && ms.PlanId == planId).FirstOrDefault();
+            return await _dbContext.MemberShips
+                             .Where(ms => ms.MemberId == memberId && ms.PlanId == planId).FirstOrDefaultAsync();
         }
 
         public IEnumerable<MemberShip> GetMemberShips()

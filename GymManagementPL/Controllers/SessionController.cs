@@ -1,4 +1,5 @@
-﻿using GymManagementBLL.Services.Classes;
+﻿using System.Threading.Tasks;
+using GymManagementBLL.Services.Classes;
 using GymManagementBLL.Services.Interfaces;
 using GymManagementSystemBLL.ViewModels.SessionViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -17,19 +18,19 @@ namespace GymManagementPL.Controllers
             _sessionService = sessionService;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var sessions = _sessionService.Index();
+            var sessions = await _sessionService.GetAllSessionsAsync();
             return View(sessions);
         }
-        public ActionResult GetSessionDetails(int id)
+        public async Task<ActionResult> GetSessionDetails(int id)
         {
             if (id <= 0)
             {
                 TempData["Error"] = "Cannot Found Session ";
                 return RedirectToAction(nameof(Index));
             }
-            var session = _sessionService.GetSessionById(id);
+            var session = await _sessionService.GetSessionByIdAsync(id);
             if (session is null)
             {
                 TempData["Error"] = "Cannot Found Session ";
@@ -38,56 +39,56 @@ namespace GymManagementPL.Controllers
             return View(session);
         }
 
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            var trainers = _sessionService.GetAllTrainerForDropDown();
+            var trainers = await _sessionService.GetAllTrainerForDropDownAsync();
             ViewBag.Trainers = new SelectList(trainers, "Id", "Name");
-            var categories = _sessionService.GetAllCategoryForDropDown();
+            var categories = await _sessionService.GetAllCategoryForDropDownAsync();
             ViewBag.Categories = new SelectList(categories, "Id", "Name");
 
             return View();
 
         }
         [HttpPost]
-        public ActionResult CreateSession(CreateSessionViewModel viewModel)
+        public async Task<ActionResult> CreateSession(CreateSessionViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 TempData["Error"] = "Invalid Data ";
                 return RedirectToAction(nameof(Index) , viewModel);
             }
-            bool IsSessionCreated = _sessionService.CreateSession(viewModel);
+            bool IsSessionCreated = await _sessionService.CreateSessionAsync(viewModel);
             if (!IsSessionCreated) TempData["Error"] = "Failed To Create Session ";
             else TempData["Success"] = "Session Created Successfully ";
             return RedirectToAction(nameof(Index));
         }
 
-        public ActionResult UpdateSession(int id)
+        public async Task<ActionResult> UpdateSession(int id)
         {
             if (id <= 0)
             {
                 TempData["Error"] = "Cannot Found Session ";
                 return RedirectToAction(nameof(Index));
             }
-            var session = _sessionService.GetSessionForUpdate(id);
+            var session = await _sessionService.GetSessionForUpdateAsync(id);
             if (session is null)
             {
                 TempData["Error"] = "Cannot Found Session ";
                 return RedirectToAction(nameof(Index));
             }
-            var trainers = _sessionService.GetAllTrainerForDropDown();
+            var trainers = await _sessionService.GetAllTrainerForDropDownAsync();
             ViewBag.Trainers = new SelectList(trainers, "Id", "Name");
             return View(session);
         }
         [HttpPost]
-        public ActionResult UpdateSession(int id , UpdateSessionViewModel viewModel)
+        public async Task<ActionResult> UpdateSession(int id , UpdateSessionViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 TempData["Error"] = "Invalid Data ";
                 return RedirectToAction(nameof(Index), viewModel);
             }
-            bool IsSessionUpdated = _sessionService.UpdateSession(viewModel, id);
+            bool IsSessionUpdated = await _sessionService.UpdateSessionAsync(viewModel, id);
             if (!IsSessionUpdated) TempData["Error"] = "Failed To Update Session ";
             else TempData["Success"] = "Session Updated Successfully ";
             return RedirectToAction(nameof(Index));
@@ -100,7 +101,7 @@ namespace GymManagementPL.Controllers
                 TempData["Error"] = "Not Found Session";
                 return RedirectToAction(nameof(Index));
             }
-            var session = _sessionService.GetSessionById(id);
+            var session = _sessionService.GetSessionByIdAsync(id);
             if (session is null)
             {
                 TempData["Error"] = "Not Found Session";
@@ -110,9 +111,9 @@ namespace GymManagementPL.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult DeleteConfirm(int id)
+        public async Task<ActionResult> DeleteConfirm(int id)
         {
-            bool IsSessionDeleted = _sessionService.RemoveSession(id);
+            bool IsSessionDeleted = await _sessionService.RemoveSessionAsync(id);
             if (!IsSessionDeleted)
             {
                 TempData["Error"] = "Failed To Delete Session";

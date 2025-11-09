@@ -28,43 +28,43 @@ namespace GymManagementBLL.Services.Classes
                 return Enumerable.Empty<MemberShipViewModel>();
             return _mapper.Map<IEnumerable<MemberShip>, IEnumerable<MemberShipViewModel>>(memberShips);
         }
-        public bool CreateMemberShip(CreateMemberShipViewModel memberShipViewModel)
+        public async Task<bool> CreateMemberShipAsync(CreateMemberShipViewModel memberShipViewModel)
         {
-            var MemberShipisExist = GetMemberShipByIDs(memberShipViewModel.MemberId , memberShipViewModel.PlanId);
+            var MemberShipisExist = await GetMemberShipByIDsAsync(memberShipViewModel.MemberId , memberShipViewModel.PlanId);
             if (MemberShipisExist != null)
                 return false;
             var memberShipEntity = _mapper.Map<CreateMemberShipViewModel, MemberShip>(memberShipViewModel);
             memberShipEntity.EndDate = DateTime.Now.AddDays(3);
-            _unitOfWork.MemberShipRepository.Add(memberShipEntity);
-            return _unitOfWork.SaveChanges() > 0;
+            await _unitOfWork.MemberShipRepository.AddAsync(memberShipEntity);
+            return await _unitOfWork.SaveChangesAsync() > 0;
 
         }
-        public MemberShip? GetMemberShipByIDs(int MemberId , int PlanId)
+        public async Task<MemberShip?> GetMemberShipByIDsAsync(int MemberId , int PlanId)
         {
-            var membership = _unitOfWork.MemberShipRepository.GetByMemberIdAndPlanId(MemberId , PlanId);
+            var membership = await _unitOfWork.MemberShipRepository.GetByMemberIdAndPlanIdAsync(MemberId , PlanId);
             if (membership == null)
                 return null;
             return membership;
         }
-        public bool DeleteMemberShip(MemberShip memberShip)
+        public async Task<bool> DeleteMemberShipAsync(MemberShip memberShip)
         {
             if (memberShip == null)
                 return false;
             _unitOfWork.MemberShipRepository.Delete(memberShip);
-            return _unitOfWork.SaveChanges() > 0;
+            return await _unitOfWork.SaveChangesAsync() > 0;
         }
 
-        public IEnumerable<SelectMemberToDropListViewModel> GetMembers()
+        public async Task<IEnumerable<SelectMemberToDropListViewModel>> GetMembersAsync()
         {
-            var members = _unitOfWork.GetRepository<Member>().GetAll();
+            var members = await _unitOfWork.GetRepository<Member>().GetAllAsync();
             if(members == null || !members.Any())
                 return Enumerable.Empty<SelectMemberToDropListViewModel>();
             return _mapper.Map<IEnumerable<Member>, IEnumerable<SelectMemberToDropListViewModel>>(members);
         }
 
-        public IEnumerable<SelectPlanToDropListViewModel> GetPlans()
+        public async Task<IEnumerable<SelectPlanToDropListViewModel>> GetPlansAsync()
         {
-            var plans = _unitOfWork.GetRepository<Plan>().GetAll();
+            var plans = await _unitOfWork.GetRepository<Plan>().GetAllAsync();
             if (plans == null || !plans.Any())
                 return Enumerable.Empty<SelectPlanToDropListViewModel>();
             return _mapper.Map<IEnumerable<Plan>, IEnumerable<SelectPlanToDropListViewModel>>(plans);

@@ -11,8 +11,7 @@ namespace GymManagementDAL.Repositories.Interfaces
     {
         IEnumerable<MemberShip> GetMemberShips();
 
-        MemberShip? GetByMemberIdAndPlanId(int memberId , int planId);
-        //bool CreateMemberShip(MemberShip memberShip);
-        //bool DeleteMemberShip(MemberShip memberShip);
+        Task<MemberShip?> GetByMemberIdAndPlanIdAsync(int memberId , int planId);
+        
     }
 }

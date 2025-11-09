@@ -15,26 +15,26 @@ namespace GymManagementPL.Controllers
             _memberSessionService = memberSessionService;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var memberSessions = _memberSessionService.GetNotCompletedMemberSessions();
+            var memberSessions = await _memberSessionService.GetNotCompletedMemberSessionsAsync();
             return View(memberSessions);
 
         }
 
-        public ActionResult GetMembersForOnGoingSessions(int sessionId)
+        public async Task<ActionResult> GetMembersForOnGoingSessions(int sessionId)
         {
           
-            var members = _memberSessionService.GetMembersForOnGoingsSessions(sessionId);
+            var members = await _memberSessionService.GetMembersForOnGoingsSessionsAsync(sessionId);
             return View(members);
         }
 
         [HttpPost]
-        public ActionResult IsAttended(int sessionId , int memberId)
+        public async Task<ActionResult> IsAttended(int sessionId , int memberId)
         {
             if(sessionId <=0 || memberId <=0)
                 TempData["Error"] = "Invalid Data.";
-            bool isAttended = _memberSessionService.IsAttended(sessionId, memberId);
+            bool isAttended = await _memberSessionService.IsAttendedAsync(sessionId, memberId);
             if(isAttended)
                 TempData["Success"] = "Attendance status updated successfully.";
             else
@@ -44,19 +44,19 @@ namespace GymManagementPL.Controllers
             return RedirectToAction(nameof(GetMembersForOnGoingSessions), new { sessionId });
         }
 
-        public ActionResult GetMembersForUpcomingSession(int sessionId)
+        public async Task<ActionResult> GetMembersForUpcomingSession(int sessionId)
         {
-            var members = _memberSessionService.GetMembersForUpComingSessions(sessionId);
+            var members = await _memberSessionService.GetMembersForUpComingSessionsAsync(sessionId);
             TempData["SessionId"] = sessionId;
             TempData.Keep("SessionId");
             return View(members);
         }
         [HttpPost]
-        public ActionResult Delete(int sessionId, int memberId)
+        public async Task<ActionResult> Delete(int sessionId, int memberId)
         {
             if (sessionId <= 0 || memberId <= 0)
                 TempData["Error"] = "Invalid Data.";
-            var isDeleted = _memberSessionService.DeleteMemberSession(sessionId, memberId);
+            var isDeleted = await _memberSessionService.DeleteMemberSessionAsync(sessionId, memberId);
             if (isDeleted)
                 TempData["Success"] = "Member removed from session successfully.";
             else
@@ -65,22 +65,22 @@ namespace GymManagementPL.Controllers
             return RedirectToAction(nameof(GetMembersForUpcomingSession), new { sessionId });
         }
 
-        public ActionResult Create(int sessionId)
+        public async Task<ActionResult> Create(int sessionId)
         {
-            var members = _memberSessionService.GetMembers();
+            var members = await _memberSessionService.GetMembersAsync();
             ViewBag.Members = new SelectList(members, "MemberId", "MemberName");
            
             return View();
         }
         [HttpPost]
-        public ActionResult Create(CreateMemberSessionViewModel createdMS )
+        public async Task<ActionResult> Create(CreateMemberSessionViewModel createdMS )
         {
             if (!ModelState.IsValid)
             {
                 TempData["Error"] = "Invalid Data.";
                 return View(createdMS);
             }
-            var isCreated = _memberSessionService.CreateMemberSession(createdMS);
+            var isCreated = await _memberSessionService.CreateMemberSessionAsync(createdMS);
 
             if (isCreated)
                 TempData["Success"] = "Member session created successfully.";

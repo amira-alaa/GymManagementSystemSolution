@@ -18,19 +18,19 @@ namespace GymManagementDAL.Repositories.Classes
         {
             _dbContext = dbContext;
         }
-        public void Add(IEntity entity) => _dbContext.Set<IEntity>().Add(entity);
+        public async Task AddAsync(IEntity entity) => await _dbContext.Set<IEntity>().AddAsync(entity);
 
         public void Delete(IEntity entity)=> _dbContext.Set<IEntity>().Remove(entity);
 
 
-        public IEnumerable<IEntity> GetAll(Func<IEntity, bool>? condition = null)
+        public async Task<IEnumerable<IEntity>> GetAllAsync(Func<IEntity, bool>? condition = null)
         {
-            if (condition is null) return _dbContext.Set<IEntity>().AsNoTracking().ToList();
+            if (condition is null) return await _dbContext.Set<IEntity>().AsNoTracking().ToListAsync();
             else return _dbContext.Set<IEntity>().AsNoTracking().Where(condition).ToList();
 
         }
 
-        public IEntity? GetById(int Id) => _dbContext.Set<IEntity>().Find(Id);
+        public async Task<IEntity?> GetByIdAsync(int Id) => await _dbContext.Set<IEntity>().FindAsync(Id);
 
         public void Update(IEntity entity)=> _dbContext.Set<IEntity>().Update(entity);
       

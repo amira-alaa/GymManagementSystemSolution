@@ -18,12 +18,12 @@ namespace GymManagementBLL.Services.Classes
         {
             _userManager = userManager;
         }
-        public ApplicationUser? Validate(AccountViewModel viewModel)
+        public async Task<ApplicationUser?> ValidateAsync(AccountViewModel viewModel)
         {
-            var user = _userManager.FindByEmailAsync(viewModel.Email).Result;
+            var user = await _userManager.FindByEmailAsync(viewModel.Email);
             if (user is null) return null;
             
-            var isPasswordValid = _userManager.CheckPasswordAsync(user, viewModel.Password).Result;
+            var isPasswordValid = await _userManager.CheckPasswordAsync(user, viewModel.Password);
             return isPasswordValid ? user : null;
         }
     }

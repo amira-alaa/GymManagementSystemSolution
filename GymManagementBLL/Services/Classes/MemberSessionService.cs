@@ -25,71 +25,71 @@ namespace GymManagementBLL.Services.Classes
             _mapper = mapper;
         }
 
-        public bool CreateMemberSession(CreateMemberSessionViewModel CreatedMs)
+        public async Task<bool> CreateMemberSessionAsync(CreateMemberSessionViewModel CreatedMs)
         {
-            var IsMemberSessionExist = _unitOfWork.MemberSessionRepository
-                                                .GetAll(ms => ms.SessionId == CreatedMs.SessionId && ms.MemberId == CreatedMs.MemberId)
-                                                .Any();
-            if (IsMemberSessionExist) return false;
+            var IsMemberSessionExist = await _unitOfWork.MemberSessionRepository
+                                                .GetAllAsync(ms => ms.SessionId == CreatedMs.SessionId && ms.MemberId == CreatedMs.MemberId);
+                                                
+            if (IsMemberSessionExist.Any()) return false;
             var MS = _mapper.Map<CreateMemberSessionViewModel, MemberSession>(CreatedMs);
-            _unitOfWork.MemberSessionRepository.Add(MS);
-            return _unitOfWork.SaveChanges() > 0;
+            await _unitOfWork.MemberSessionRepository.AddAsync(MS);
+            return await _unitOfWork.SaveChangesAsync() > 0;
 
         }
 
-        public IEnumerable<MembersForDropListBookingViewModel> GetMembers()
+        public async Task<IEnumerable<MembersForDropListBookingViewModel>> GetMembersAsync()
         {
-            var members = _unitOfWork.MemberSessionRepository.GetMembers();
+            var members = await _unitOfWork.GetRepository<Member>().GetAllAsync();
             if (members is null || !members.Any()) return Enumerable.Empty<MembersForDropListBookingViewModel>();
             return _mapper.Map<IEnumerable<Member>, IEnumerable<MembersForDropListBookingViewModel>>(members);
         }
 
-        public bool DeleteMemberSession(int sessionId, int memberId)
+        public async Task<bool> DeleteMemberSessionAsync(int sessionId, int memberId)
         {
-            var memberSession = _unitOfWork.MemberSessionRepository.GetAll()
-                                                       .FirstOrDefault(ms => ms.SessionId == sessionId && ms.MemberId == memberId);
-            if (memberSession is null) return false;
-            _unitOfWork.MemberSessionRepository.Delete(memberSession);
-            return _unitOfWork.SaveChanges() > 0;
+            var memberSession = await _unitOfWork.MemberSessionRepository.GetAllAsync();
+            var memberSessionFirst = memberSession.FirstOrDefault(ms => ms.SessionId == sessionId && ms.MemberId == memberId);
+            if (memberSessionFirst is null) return false;
+            _unitOfWork.MemberSessionRepository.Delete(memberSessionFirst);
+            return await _unitOfWork.SaveChangesAsync() > 0;
         }
 
-        public IEnumerable<MembersForOnGoingSessionsViewModel> GetMembersForOnGoingsSessions(int sessionId)
+        public async Task<IEnumerable<MembersForOnGoingSessionsViewModel>> GetMembersForOnGoingsSessionsAsync(int sessionId)
         {
-            var members = _unitOfWork.MemberSessionRepository.GetMembersForOnGoing(sessionId);
+            var members = await _unitOfWork.MemberSessionRepository.GetMembersForOnGoingAsync(sessionId);
             if(members is null || !members.Any()) return Enumerable.Empty<MembersForOnGoingSessionsViewModel>();
 
             return _mapper.Map<IEnumerable<MemberSession>, IEnumerable<MembersForOnGoingSessionsViewModel>>(members);
         }
 
-        public IEnumerable<MembersForUpComingSessionsViewModel> GetMembersForUpComingSessions(int sessionId)
+        public async Task<IEnumerable<MembersForUpComingSessionsViewModel>> GetMembersForUpComingSessionsAsync(int sessionId)
         {
-            var members = _unitOfWork.MemberSessionRepository.GetMembersForUpComing(sessionId);
+            var members = await _unitOfWork.MemberSessionRepository.GetMembersForUpComingAsync(sessionId);
             if (members is null || !members.Any()) return Enumerable.Empty<MembersForUpComingSessionsViewModel>();
 
             return _mapper.Map<IEnumerable<MemberSession>, IEnumerable<MembersForUpComingSessionsViewModel>>(members);
         }
 
-        public IEnumerable<MemberSessionViewModel> GetNotCompletedMemberSessions()
+        public async Task<IEnumerable<MemberSessionViewModel>> GetNotCompletedMemberSessionsAsync()
         {
-            var memberSessions = _unitOfWork.MemberSessionRepository.GetNotCompletedMemberSessions();
+            var memberSessions = await _unitOfWork.MemberSessionRepository.GetNotCompletedMemberSessionsAsync();
             if(memberSessions is null || !memberSessions.Any()) return Enumerable.Empty<MemberSessionViewModel>();
 
             var viewModels = _mapper.Map< IEnumerable<MemberSession>,IEnumerable<MemberSessionViewModel>>(memberSessions);
             foreach(var vm in viewModels)
             {
-                vm.AvailableSlots = _unitOfWork.MemberSessionRepository.GetNumOfBookedSlots(vm.SessionId);
+                vm.AvailableSlots = await _unitOfWork.MemberSessionRepository.GetNumOfBookedSlotsAsync(vm.SessionId);
             }
             return viewModels;
         }
 
-        public bool IsAttended(int sessionId, int memberId)
+        public async Task<bool> IsAttendedAsync(int sessionId, int memberId)
         {
-            var memberSession = _unitOfWork.MemberSessionRepository.GetAll()
-                                                       .FirstOrDefault(ms => ms.SessionId == sessionId && ms.MemberId == memberId);
-            if (memberSession is null) return false;
-            memberSession.IsAttended = memberSession.IsAttended ? false : true;
-            _unitOfWork.MemberSessionRepository.Update(memberSession);
-            return _unitOfWork.SaveChanges() > 0;
+            var memberSession = await _unitOfWork.MemberSessionRepository.GetAllAsync();
+            var memberSessionFirst = memberSession.FirstOrDefault(ms => ms.SessionId == sessionId && ms.MemberId == memberId);
+            if (memberSessionFirst is null) return false;
+            memberSessionFirst.IsAttended = memberSessionFirst.IsAttended ? false : true;
+            _unitOfWork.MemberSessionRepository.Update(memberSessionFirst);
+            return await _unitOfWork.SaveChangesAsync() > 0;
         }
 
 

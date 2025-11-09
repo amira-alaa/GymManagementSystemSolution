@@ -12,11 +12,11 @@ namespace GymManagementBLL.Services.Interfaces
     public interface IMemberShipService 
     {
         IEnumerable<MemberShipViewModel> GetAllMemberShips();
-        bool CreateMemberShip(CreateMemberShipViewModel memberShipViewModel);
-        MemberShip? GetMemberShipByIDs(int MemberId , int PlanId);
+        Task<bool> CreateMemberShipAsync(CreateMemberShipViewModel memberShipViewModel);
+        Task<MemberShip?> GetMemberShipByIDsAsync(int MemberId , int PlanId);
 
-        IEnumerable<SelectMemberToDropListViewModel> GetMembers();
-        IEnumerable<SelectPlanToDropListViewModel> GetPlans();
-        bool DeleteMemberShip(MemberShip memberShip);
+        Task<IEnumerable<SelectMemberToDropListViewModel>> GetMembersAsync();
+        Task<IEnumerable<SelectPlanToDropListViewModel>> GetPlansAsync();
+        Task<bool> DeleteMemberShipAsync(MemberShip memberShip);
     }
 }

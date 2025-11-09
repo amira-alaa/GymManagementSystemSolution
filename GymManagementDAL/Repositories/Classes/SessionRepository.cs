@@ -19,26 +19,26 @@ namespace GymManagementDAL.Repositories.Classes
             _dbContext = dbContext;
         }
 
-        public int GetNumOfBookedSlots(int sessionId)
+        public async Task<int> GetNumOfBookedSlotsAsync(int sessionId)
         {
-            return _dbContext.MemberSessions.Count(s => s.SessionId == sessionId);
+            return await _dbContext.MemberSessions.CountAsync(s => s.SessionId == sessionId);
         }
 
-        public Session? GetSessionByIdWithTrainersAndCategories(int id)
+        public async Task<Session?> GetSessionByIdWithTrainersAndCategoriesAsync(int id)
         {
-            return _dbContext.Sessions.Include(s => s.SessionTrainer)
+            return await _dbContext.Sessions.Include(s => s.SessionTrainer)
                                       .Include(s => s.SessionCategory)
                                       .AsNoTracking()
-                                      .FirstOrDefault(s => s.Id == id);
+                                      .FirstOrDefaultAsync(s => s.Id == id);
         }
        
 
-        public IEnumerable<Session> GetSessionsWithTrainersAndCategories()
+        public async Task<IEnumerable<Session>> GetSessionsWithTrainersAndCategoriesAsync()
         {
-            return _dbContext.Sessions.Include(s => s.SessionTrainer)
+            return await _dbContext.Sessions.Include(s => s.SessionTrainer)
                                       .Include(s => s.SessionCategory)
                                       .Include(s => s.MemberSessions)
-                                      .AsNoTracking().ToList();
+                                      .AsNoTracking().ToListAsync();
         }
     }
 }

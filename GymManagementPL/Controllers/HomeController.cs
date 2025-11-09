@@ -14,9 +14,9 @@ namespace GymManagementPL.Controllers
             _analyticesService = analyticesService;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var data = _analyticesService.GetAnalyticesData();
+            var data = await _analyticesService.GetAnalyticesDataAsync();
             return View(data);
         }
     }

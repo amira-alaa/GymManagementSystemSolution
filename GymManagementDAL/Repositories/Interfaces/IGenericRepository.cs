@@ -9,9 +9,9 @@ namespace GymManagementDAL.Repositories.Interfaces
 {
     public interface IGenericRepository<IEntity> where IEntity : BaseEntity , new()
     {
-        IEnumerable<IEntity> GetAll(Func<IEntity, bool>? condition = null);
-        IEntity? GetById(int Id);
-        void Add(IEntity entity);
+        Task<IEnumerable<IEntity>> GetAllAsync(Func<IEntity, bool>? condition = null);
+        Task<IEntity?> GetByIdAsync(int Id);
+        Task AddAsync(IEntity entity);
         void Update(IEntity entity);
         void Delete(IEntity entity);
     }

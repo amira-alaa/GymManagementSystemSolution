@@ -11,7 +11,7 @@ namespace GymManagementDAL.DataSeed
 {
     public class GymDbContextDataSeeding
     {
-        public static bool DataSeed(GymDbContext dbContext)
+        public static async Task<bool> DataSeedAsync(GymDbContext dbContext)
         {
             try
             {
@@ -20,13 +20,13 @@ namespace GymManagementDAL.DataSeed
                 if (IsPlansExist && IsCategoriesExist) return false;
                 if (!IsPlansExist)
                 {
-                    var Plans = LoadData<Plan>("Plans.json");
+                    var Plans = await LoadDataAsync<Plan>("Plans.json");
                     if (Plans.Any()) dbContext.Plans.AddRange(Plans);
                 }
                 if (!IsCategoriesExist)
                 {
-                    var Categories = LoadData<Category>("Categories.json");
-                    if (Categories.Any()) dbContext.Categories.AddRange(Categories);
+                    var Categories = await LoadDataAsync<Category>("Categories.json");
+                    if (Categories.Any()) await dbContext.Categories.AddRangeAsync(Categories);
                 }
                 return dbContext.SaveChanges() > 0;
             }
@@ -36,16 +36,17 @@ namespace GymManagementDAL.DataSeed
                 return false;
             }
         }
-        private static List<T> LoadData<T>(string filePath)
+        private static async Task<List<T>> LoadDataAsync<T>(string filePath)
         {
             var FilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Files", filePath);
             if (!File.Exists(FilePath)) throw new FileNotFoundException();
-            string Data = File.ReadAllText(FilePath);
+            //string Data = await File.ReadAllTextAsync(FilePath);
+            using var Data = File.OpenRead(FilePath);
             var Options = new JsonSerializerOptions()
             {
                 PropertyNameCaseInsensitive = true
             };
-            return JsonSerializer.Deserialize<List<T>>(Data, Options) ?? new List<T>();
+            return await JsonSerializer.DeserializeAsync<List<T>>(Data, Options) ?? new List<T>();
         }
     }
 }

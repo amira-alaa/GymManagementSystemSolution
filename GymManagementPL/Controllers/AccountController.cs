@@ -24,18 +24,18 @@ namespace GymManagementPL.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(AccountViewModel accountView)
+        public async Task<ActionResult> Login(AccountViewModel accountView)
         {
             if(!ModelState.IsValid) return View(accountView);
 
-            var user = _accountService.Validate(accountView);
+            var user = await _accountService.ValidateAsync(accountView);
             if(user == null)
             {
                 ModelState.AddModelError("InvalidLogin", "Invalid Email Or Password");
                 return View(accountView);
             }
 
-            var result =  _signInManager.PasswordSignInAsync(user, accountView.Password, accountView.RememberMe, false).Result;
+            var result =  await _signInManager.PasswordSignInAsync(user, accountView.Password, accountView.RememberMe, false);
             if(result.IsNotAllowed)
                 ModelState.AddModelError("InvalidLogin", "Your Account Not Allowed");
 
@@ -48,9 +48,9 @@ namespace GymManagementPL.Controllers
             return View(accountView);
         }
 
-        public ActionResult Logout()
+        public async Task<ActionResult> Logout()
         {
-            _signInManager.SignOutAsync().GetAwaiter().GetResult();
+            await _signInManager.SignOutAsync();
             return RedirectToAction("Login", "Account");
         }
 

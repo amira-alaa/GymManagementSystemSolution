@@ -20,20 +20,20 @@ namespace GymManagementPL.Controllers
             return View(memberShips);
         }
 
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            var members = _memberShipService.GetMembers();
+            var members = await _memberShipService.GetMembersAsync();
             ViewBag.Members = new SelectList(members, "Id", "Name");
-            var plans = _memberShipService.GetPlans();
+            var plans = await _memberShipService.GetPlansAsync();
             ViewBag.Plans = new SelectList(plans, "Id", "Name");
             return View();
         }
         [HttpPost]
-        public ActionResult CreateMemberShip(CreateMemberShipViewModel CreateMemberShip)
+        public async Task<ActionResult> CreateMemberShip(CreateMemberShipViewModel CreateMemberShip)
         {
             if (!ModelState.IsValid) RedirectToAction(nameof(Create), CreateMemberShip);
 
-            bool IsCreated = _memberShipService.CreateMemberShip(CreateMemberShip);
+            bool IsCreated = await _memberShipService.CreateMemberShipAsync(CreateMemberShip);
             if (!IsCreated)
                 TempData["Error"] = "Failed to create membership. Please try again.";
             return RedirectToAction(nameof(Index));
@@ -41,7 +41,7 @@ namespace GymManagementPL.Controllers
 
         }
         [HttpPost]
-        public ActionResult Delete(int MemberId , int PlanId)
+        public async Task<ActionResult> Delete(int MemberId , int PlanId)
         {
             if(MemberId <= 0 || PlanId <= 0)
             {
@@ -49,13 +49,13 @@ namespace GymManagementPL.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var membership = _memberShipService.GetMemberShipByIDs(MemberId, PlanId);
+            var membership = await _memberShipService.GetMemberShipByIDsAsync(MemberId, PlanId);
             if(membership == null)
             {
                 TempData["Error"] = "Membership not found.";
                 return RedirectToAction(nameof(Index));
             }
-            bool IsDeleted = _memberShipService.DeleteMemberShip(membership);
+            bool IsDeleted = await _memberShipService.DeleteMemberShipAsync(membership);
             if (!IsDeleted)
                 TempData["Error"] = "Failed to delete membership. Please try again.";
             else

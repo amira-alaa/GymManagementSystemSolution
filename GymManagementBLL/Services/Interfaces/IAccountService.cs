@@ -10,6 +10,6 @@ namespace GymManagementBLL.Services.Interfaces
 {
     public interface IAccountService
     {
-        ApplicationUser? Validate(AccountViewModel viewModel);
+        Task<ApplicationUser?> ValidateAsync(AccountViewModel viewModel);
     }
 }
