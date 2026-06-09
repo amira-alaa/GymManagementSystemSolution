@@ -10,14 +10,13 @@
 
 *A comprehensive web-based application for managing gym operations — built with clean architecture, separation of concerns, and enterprise design patterns.*
 
-[📖 Documentation](#-documentation) · [🏗️ Architecture](#-architecture)
 
 </div>
 
 
 ## 🎯 Overview
 
-**Gym Management System** is a full-stack web application designed to streamline gym operations by providing an intuitive interface for managing members, trainers, workout sessions, and membership plans. The system follows a **Three-Layer Architecture** with **Repository Pattern** and **Unit of Work** to ensure maintainability, scalability, and testability.
+**Gym Management System** is a full-stack web application designed to streamline gym operations by providing an intuitive interface for managing members, trainers, workout sessions, and membership plans. The system follows a **Three-Tier Architecture** with **Repository Pattern** and **Unit of Work** to ensure maintainability, scalability, and testability.
 
 Whether you're a gym owner tracking member attendance, a manager assigning trainers to sessions, or an administrator managing subscription plans — this system handles it all from a single dashboard.
 
@@ -59,7 +58,7 @@ Whether you're a gym owner tracking member attendance, a manager assigning train
 
 ## 🏗️ Architecture
 
-The project follows a strict **Three-Layer Architecture** ensuring clear separation of concerns:
+The project follows a strict **Three-Tier Architecture** ensuring clear separation of concerns:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -127,36 +126,11 @@ User Response ← View ← ViewModel ← DTO ← Service (BLL) ← Repository (D
 | **Object Mapping** | AutoMapper | 13.x |
 | **Frontend Framework** | Bootstrap | 5.3 |
 | **Validation** | Data Annotations + FluentValidation | — |
-| **IDE** | Visual Studio 2022 | 17.14 |
-| **Architecture** | Three-Layer (PL / BLL / DAL) | — |
+| **Architecture** | Three-Tier Architecture | — |
 | **Design Patterns** | Repository Pattern, Unit of Work | — |
 
 ---
 
-## 📄 License
-
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
-
----
-
-## 📬 Contact
-
-<div align="center">
-
-**Amira Alaa Eldin Amin**
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/amira-alaa-a26a02205)
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/amira-alaa)
-[![Email](https://img.shields.io/badge/Email-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:alaaamira898@gmail.com)
-
-</div>
-
----
-
-<div align="center">
-
-*Built with ❤️ using ASP.NET Core MVC, C#, and SQL Server*
-
-⭐ If you found this project helpful, please give it a star!
+ If you found this project helpful, please give it a star!
 
 </div>
