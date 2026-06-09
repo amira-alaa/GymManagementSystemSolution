@@ -30,7 +30,7 @@
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i> Create Booking
                             </button>
-                            <a asp-action="GetMembersForUpcomingSession" class="btn btn-secondary">
+                            <a asp-action="GetMembersForUpcomingSession" class="btn btn-secondary" asp-route-sessionId="@TempData["SessionId"]">
                                 <i class="fas fa-arrow-left"></i> Back to List
                             </a>
                         </div>

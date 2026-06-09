@@ -86,8 +86,8 @@ namespace GymManagementPL.Controllers
                 TempData["Success"] = "Member session created successfully.";
             else
                 TempData["Error"] = "Failed to create member session.";
-            //ViewData["sessionId"] = sessionId;
-            return RedirectToAction(nameof(GetMembersForUpcomingSession));
+            //ViewData["sessionId"] = TempData["SessionId"];
+            return View(nameof(GetMembersForUpcomingSession) );
         }
     }
 }
