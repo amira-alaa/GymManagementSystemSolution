@@ -130,6 +130,13 @@ User Response ← View ← ViewModel ← DTO ← Service (BLL) ← Repository (D
 | **Design Patterns** | Repository Pattern, Unit of Work | — |
 
 ---
+## 📸 Screenshots
+
+|-----------|-------------|
+| ![Dashboard](screenshots/home.png) | ![Members](screenshots/members.png) |
+| ![Sessions](screenshots/sessions.png) ![](screenshots/sessions01.png) | ![Plans](screenshots/plans.png) |
+| ![](screenshots/login.png) ![](screenshots/trainers.png)|
+---
 
  If you found this project helpful, please give it a star!
 
