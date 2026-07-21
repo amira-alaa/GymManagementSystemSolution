@@ -1,11 +1,5 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "GymManagementPL/GymManagementPL.csproj",
-      "use": "@vercel/dotnet"
-    }
-  ],
   "routes": [
     {
       "src": "/(.*)",
